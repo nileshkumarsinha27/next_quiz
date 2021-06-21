@@ -2,12 +2,16 @@
 body {
   font-family: $font;
   box-sizing: border-box;
-  max-width: 1440px;
   margin: 0 auto;
   position: relative;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
+  width: 100%;
 }
 * {
   outline: none;
+}
+.container {
+  margin: 60px auto 0;
+  padding: 30px 20px;
 }

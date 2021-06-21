@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { PageProps } from '../types/pageProps';
 import '../styles/_main.scss';
-const MyApp = ({ Component, pageProps }: PageProps): React.ReactNode => (
-  <Component {...pageProps} />
+import Layout from '../components/layout/Layout';
+
+const MyApp: FC<PageProps> = ({ Component, pageProps }: PageProps) => (
+  <Layout>
+    <Component {...pageProps} />
+  </Layout>
 );
 
 export default MyApp;
