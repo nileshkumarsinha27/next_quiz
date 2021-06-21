@@ -43,7 +43,9 @@ const Home: NextPage<HomePageProps> = ({ categories }: HomePageProps) => (
 Home.getInitialProps = async ({ req }) => {
   const response = await fetch('https://opentdb.com/api_category.php');
   const jsonResponse = await response.json();
-  return { categories: jsonResponse.trivia_categories };
+  return {
+    categories: jsonResponse.trivia_categories,
+  };
 };
 
 export default Home;
