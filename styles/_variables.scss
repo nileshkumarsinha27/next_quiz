@@ -1,0 +1,40 @@
+$primary-color: #2184ff;
+$box-shadow1: rgba(0, 0, 0, 0.14);
+$white-color: #ffffff;
+$black-color: #000000;
+$font: -apple-system, BlinkMacSystemFont, Roboto, 'Segoe UI', 'Fira Sans',
+  Avenir, 'Helvetica Neue', 'Lucida Grande', sans-serif;
+$white-opacity: rgba(255, 255, 255, 0.5);
+$secondary-color: #7ba1d0;
+$background-light: #757ce8;
+$background-dark: #1976d2;
+$text-dark: #002884;
+$search-background: #8abbef;
+$main-background: #778899;
+$border-color: #e0e0e0;
+$search-text-color: #4387d0;
+$box-shadow: rgba(0, 0, 0, 0.12);
+$box-shadow2: rgba(0, 0, 0, 0.2);
+$disabled-color: #d3d5d7;
+$grey-text: #969ba0;
+$error-color: #d63443;
+@mixin nav-list-font-style() {
+  font-weight: normal;
+  font-size: 18px;
+  color: $black-color;
+}
+
+@keyframes toastAnimation {
+  0% {
+    right: -50%;
+  }
+  50% {
+    right: 10px;
+  }
+  75% {
+    right: 10px;
+  }
+  100% {
+    right: -50%;
+  }
+}
