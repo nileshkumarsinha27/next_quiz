@@ -29,5 +29,11 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,json,css,md,ts,tsx,scss}": [
+      "eslint --fix src",
+      "prettier --write"
+    ]
   }
 }
