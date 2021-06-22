@@ -10,9 +10,17 @@
   border-radius: 5px;
   margin: 20px;
   cursor: pointer;
+  box-sizing: border-box;
+  flex-wrap: wrap;
   &:hover {
     transform: scale(1.05);
     color: $primary-color;
     font-size: 1.1rem;
+  }
+}
+@media screen and (max-width: 767px) {
+  .categoryCard {
+    width: 100%;
+    font-size: 0.9rem;
   }
 }

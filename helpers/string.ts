@@ -16,4 +16,5 @@ export const decodeEscapeString = (str) =>
     .replace(/&Aring;/g, 'Å')
     .replace(/&eacute;/g, 'é')
     .replace(/&ntilde;/g, 'ñ')
-    .replace(/&ecirc;/g, 'ê');
+    .replace(/&ecirc;/g, 'ê')
+    .replace(/&iacute;/g, 'í');
