@@ -178,6 +178,11 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           .dialog-text span {
             padding: 5px 0;
           }
+          @media screen and (max-width: 767px) {
+            .button-container {
+              width: 100%;
+            }
+          }
         `}
       </style>
     </main>
