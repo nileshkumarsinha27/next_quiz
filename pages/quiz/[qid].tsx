@@ -1,15 +1,31 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import { QuizPageProps, QuizQuestion } from '../../types/quizPageProps';
 import QuestionCard from '../../components/question-card/QuestionCard';
+import { shuffleArray } from '../../helpers/array';
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
   const { qid } = router.query;
+  const correctAnswers = quizInfo.map(
+    (eachQuestion: QuizQuestion) => eachQuestion.correct_answer
+  );
+  const [responses, updateResponses] = useState(
+    quizInfo.map((_) => ({ response: '' }))
+  );
+  const handleCheckboxClick = (
+    isCheck: boolean,
+    option: string,
+    index: number
+  ) => {
+    let temp = [...responses];
+    temp[index].response = option;
+    updateResponses(temp);
+  };
   return (
     <main className="container">
       <Head>
@@ -20,7 +36,15 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
       </div>
       <section className="quiz-section">
         {quizInfo.map((eachQuestion: QuizQuestion, index) => (
-          <QuestionCard {...{ ...eachQuestion, index }} key={index} />
+          <QuestionCard
+            {...{
+              ...eachQuestion,
+              index,
+              handleCheckboxClick,
+              userResponse: responses,
+            }}
+            key={index}
+          />
         ))}
       </section>
       <style jsx lang="scss">
