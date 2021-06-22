@@ -5,20 +5,28 @@ import { NextPage } from 'next';
 import { HomePageProps } from '../types/homePageProps';
 import { TriviaCategory } from '../types/triviaCategory';
 import CategoryCard from '../components/category-card/CategoryCard';
+import Loader from '../components/loader/Loader';
+import { isDataExists } from '../helpers/array';
 
 const Home: NextPage<HomePageProps> = ({ categories }: HomePageProps) => (
   <main className="container">
     <Head>
       <title>Quiz| Dashboard</title>
     </Head>
-    <section className="home-title">
-      <span>Please select a category to start the quiz</span>
-    </section>
-    <section className="trivia-category-section">
-      {categories.map(({ id, name }: TriviaCategory) => (
-        <CategoryCard key={id} {...{ id, name }} />
-      ))}
-    </section>
+    {!isDataExists(categories) ? (
+      <Loader />
+    ) : (
+      <>
+        <section className="home-title">
+          <span>Please select a category to start the quiz</span>
+        </section>
+        <section className="trivia-category-section">
+          {categories.map(({ id, name }: TriviaCategory) => (
+            <CategoryCard key={id} {...{ id, name }} />
+          ))}
+        </section>
+      </>
+    )}
     <style jsx lang="scss">
       {`
         .home-title {

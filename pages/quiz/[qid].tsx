@@ -10,6 +10,8 @@ import QuestionCard from '../../components/question-card/QuestionCard';
 import Button from '../../components/button/Button';
 import Overlay from '../../components/overlay/Overlay';
 import Dialogbox from '../../components/dailog-box/DialogBox';
+import Loader from '../../components/loader/Loader';
+import { isDataExists } from '../../helpers/array';
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
@@ -69,60 +71,66 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
         </Link>
         <span> &gt; {quizInfo[0].category}</span>
       </div>
-      <section className="quiz-section">
-        {quizInfo.map((eachQuestion: QuizQuestion, index) => (
-          <QuestionCard
-            {...{
-              ...eachQuestion,
-              index,
-              handleCheckboxClick,
-              userResponse: responses,
-              hasTestSubmit,
-            }}
-            key={index}
-          />
-        ))}
-      </section>
-      {responses.every((eachResponse) => eachResponse.response) && (
-        <div className="sticky-bottom">
-          <div className="button-container">
-            <Button
-              value="Reset Quiz"
-              onClick={handleCancelClick}
-              btnType="error"
-            />
-            <Button value="Submit Quiz" onClick={handleQuizSubmit} />
-          </div>
-        </div>
-      )}
-      {showScore && (
-        <Overlay closeOverlay={() => toggleScore(false)}>
-          <Dialogbox
-            showActionsSection
-            actionsConfig={[
-              {
-                value: 'Ok',
-                onClick: hadleOkClick,
-                btnType: 'primary',
-              },
-              {
-                value: 'Cancel',
-                onClick: handleCancelClick,
-                btnType: 'error',
-              },
-            ]}
-          >
-            <p className="dialog-text">
-              <span>
-                Your final score is
-                <strong>
-                  {score} / {responses.length}.
-                </strong>
-              </span>
-              <span>Do you wish to check correct answers?</span>
-            </p>
-          </Dialogbox>
-        </Overlay>
+      {!isDataExists(quizInfo) ? (
+        <Loader />
+      ) : (
+        <>
+          <section className="quiz-section">
+            {quizInfo.map((eachQuestion: QuizQuestion, index) => (
+              <QuestionCard
+                {...{
+                  ...eachQuestion,
+                  index,
+                  handleCheckboxClick,
+                  userResponse: responses,
+                  hasTestSubmit,
+                }}
+                key={index}
+              />
+            ))}
+          </section>
+          {responses.every((eachResponse) => eachResponse.response) && (
+            <div className="sticky-bottom">
+              <div className="button-container">
+                <Button
+                  value="Reset Quiz"
+                  onClick={handleCancelClick}
+                  btnType="error"
+                />
+                <Button value="Submit Quiz" onClick={handleQuizSubmit} />
+              </div>
+            </div>
+          )}
+          {showScore && (
+            <Overlay closeOverlay={() => toggleScore(false)}>
+              <Dialogbox
+                showActionsSection
+                actionsConfig={[
+                  {
+                    value: 'Ok',
+                    onClick: hadleOkClick,
+                    btnType: 'primary',
+                  },
+                  {
+                    value: 'Cancel',
+                    onClick: handleCancelClick,
+                    btnType: 'error',
+                  },
+                ]}
+              >
+                <p className="dialog-text">
+                  <span>
+                    Your final score is
+                    <strong>
+                      {score} / {responses.length}.
+                    </strong>
+                  </span>
+                  <span>Do you wish to check correct answers?</span>
+                </p>
+              </Dialogbox>
+            </Overlay>
+          )}
+        </>
       )}
       <style jsx lang="scss">
         {`

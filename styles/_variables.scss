@@ -1,3 +1,5 @@
+@import './keyframes';
+@import './mixins';
 $primary-color: #2184ff;
 $box-shadow1: rgba(0, 0, 0, 0.14);
 $white-color: #ffffff;
@@ -19,23 +21,3 @@ $disabled-color: #d3d5d7;
 $grey-text: #969ba0;
 $error-color: #d63443;
 $green: #3b8070;
-@mixin nav-list-font-style() {
-  font-weight: normal;
-  font-size: 18px;
-  color: $black-color;
-}
-
-@keyframes toastAnimation {
-  0% {
-    right: -50%;
-  }
-  50% {
-    right: 10px;
-  }
-  75% {
-    right: 10px;
-  }
-  100% {
-    right: -50%;
-  }
-}

@@ -5,3 +5,6 @@ export const shuffleArray = (array) => {
   }
   return array;
 };
+
+export const isDataExists = (array, lengthToCheck = 0) =>
+  array && array.length > lengthToCheck;

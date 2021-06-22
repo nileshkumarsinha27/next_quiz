@@ -1,0 +1,23 @@
+@keyframes toastAnimation {
+  0% {
+    right: -50%;
+  }
+  50% {
+    right: 10px;
+  }
+  75% {
+    right: 10px;
+  }
+  100% {
+    right: -50%;
+  }
+}
+
+@keyframes loaderRotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
