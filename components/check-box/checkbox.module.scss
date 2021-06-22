@@ -1,0 +1,16 @@
+@import '../../styles/variables';
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  input {
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0;
+  }
+  label {
+    padding: 0 0 0 10px;
+    cursor: pointer;
+  }
+}

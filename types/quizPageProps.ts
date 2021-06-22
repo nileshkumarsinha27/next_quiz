@@ -5,6 +5,7 @@ export type QuizQuestion = {
   incorrect_answers: Array<string>;
   question: string;
   type: string;
+  index?: number;
 };
 
 export type QuizPageProps = {

@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
-import { QuizPageProps } from '../../types/quizPageProps';
+import { QuizPageProps, QuizQuestion } from '../../types/quizPageProps';
+import QuestionCard from '../../components/question-card/QuestionCard';
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
@@ -17,6 +18,11 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
       <div className="quiz-title">
         <span>Quiz on {quizInfo[0].category}</span>
       </div>
+      <section className="quiz-section">
+        {quizInfo.map((eachQuestion: QuizQuestion, index) => (
+          <QuestionCard {...{ ...eachQuestion, index }} key={index} />
+        ))}
+      </section>
       <style jsx lang="scss">
         {`
           .quiz-title {

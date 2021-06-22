@@ -1,0 +1,27 @@
+@import '../../styles/variables';
+
+.questionCardContainer {
+  box-sizing: border-box;
+  box-shadow: 0 0 31px 0 $box-shadow1;
+  width: 80%;
+  margin: 20px auto;
+  border-radius: 5px;
+  padding: 10px;
+  .questionSection {
+    padding: 10px 0 20px;
+    box-sizing: border-box;
+    font-size: 1.2rem;
+    .questionIndex {
+      padding: 0 5px 0 0;
+    }
+  }
+  .optionsSection {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    > div {
+      width: 40%;
+      margin: 20px auto;
+    }
+  }
+}
