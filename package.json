@@ -11,6 +11,7 @@
     "classnames": "^2.3.1",
     "es6-promise": "^4.2.8",
     "eslint": "^7.29.0",
+    "framer-motion": "^4.1.17",
     "husky": "^6.0.0",
     "isomorphic-fetch": "^3.0.0",
     "lint-staged": "^11.0.0",

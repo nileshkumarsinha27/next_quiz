@@ -2,6 +2,7 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextPage } from 'next';
@@ -12,6 +13,26 @@ import Overlay from '../../components/overlay/Overlay';
 import Dialogbox from '../../components/dailog-box/DialogBox';
 import Loader from '../../components/loader/Loader';
 import { isDataExists } from '../../helpers/array';
+
+const variants = {
+  initial: (i) => ({
+    x: i % 2 == 0 ? -600 : 600,
+  }),
+  animate: (i) => ({
+    x: 0,
+    transition: { duration: 0.3 * i },
+  }),
+  exit: { x: -200, transition: { duration: 0.6 } },
+};
+
+const stickyBanner = {
+  initial: { y: '200%' },
+  animate: {
+    y: 0,
+    transition: { duration: 0.6 },
+  },
+  exit: { y: '200%', transition: { duration: 0.6 } },
+};
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
@@ -31,7 +52,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
     index: number
   ) => {
     let temp = [...responses];
-    temp[index].response = option;
+    temp[index].response = temp[index].response === option ? '' : option;
     updateResponses(temp);
   };
 
@@ -77,29 +98,63 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
         <>
           <section className="quiz-section">
             {quizInfo.map((eachQuestion: QuizQuestion, index) => (
-              <QuestionCard
-                {...{
-                  ...eachQuestion,
-                  index,
-                  handleCheckboxClick,
-                  userResponse: responses,
-                  hasTestSubmit,
-                }}
-                key={index}
-              />
+              <AnimatePresence>
+                <motion.section
+                  custom={index + 1}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  variants={variants}
+                  key={index}
+                  style={{ width: '100%' }}
+                >
+                  <QuestionCard
+                    {...{
+                      ...eachQuestion,
+                      index,
+                      handleCheckboxClick,
+                      userResponse: responses,
+                      hasTestSubmit,
+                    }}
+                    key={index}
+                  />
+                </motion.section>
+              </AnimatePresence>
             ))}
           </section>
           {responses.every((eachResponse) => eachResponse.response) && (
-            <div className="sticky-bottom">
-              <div className="button-container">
-                <Button
-                  value="Reset Quiz"
-                  onClick={handleCancelClick}
-                  btnType="error"
-                />
-                <Button value="Submit Quiz" onClick={handleQuizSubmit} />
-              </div>
-            </div>
+            <AnimatePresence>
+              <motion.div
+                className="sticky-bottom"
+                variants={stickyBanner}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                style={{
+                  position: 'fixed',
+                  bottom: 0,
+                  width: '100%',
+                  height: '80px',
+                  left: 0,
+                  background: '#fff',
+                  boxShadow: '0 0 31px 0 rgba(0, 0, 0, 0.14)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  padding: '0 20px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div className="button-container">
+                  <Button
+                    value="Reset Quiz"
+                    onClick={handleCancelClick}
+                    btnType="error"
+                  />
+                  <Button value="Submit Quiz" onClick={handleQuizSubmit} />
+                </div>
+              </motion.div>
+            </AnimatePresence>
           )}
           {showScore && (
             <Overlay closeOverlay={() => toggleScore(false)}>
@@ -154,6 +209,9 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
             flex-wrap: wrap;
             width: 100%;
             padding: 0 0 80px;
+          }
+          .quiz-section .quiz-card {
+            width: 100%;
           }
           .sticky-bottom {
             position: fixed;
