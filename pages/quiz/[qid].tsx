@@ -3,6 +3,7 @@ require('isomorphic-fetch');
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { NextPage } from 'next';
 import { QuizPageProps, QuizQuestion } from '../../types/quizPageProps';
 import QuestionCard from '../../components/question-card/QuestionCard';
@@ -63,7 +64,11 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
         <title>Quiz| {quizInfo[0].category}</title>
       </Head>
       <div className="quiz-title">
-        <span>Quiz on {quizInfo[0].category}</span>
+        <Link href="/">
+          <span className="category-text">
+          Categories
+          </span>
+          </Link><span> > {quizInfo[0].category}</span>
       </div>
       <section className="quiz-section">
         {quizInfo.map((eachQuestion: QuizQuestion, index) => (
@@ -128,7 +133,13 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
             padding: 0 15px;
           }
           .quiz-title span {
-            font-size: 2rem;
+            color: #2184ff;
+            font-size: 0.9rem;
+            font-weight: bold;
+          }
+          .quiz-title .category-text{
+            cursor: pointer;
+            color: #000000;
           }
           .quiz-section {
             display: flex;
