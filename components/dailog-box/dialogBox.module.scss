@@ -1,0 +1,23 @@
+@import '../../styles/variables';
+.container {
+  width: 400px;
+  height: 100px;
+  padding: 50px 20px;
+  z-index: 2;
+  background: $white-color;
+  border-radius: 5px;
+  box-shadow: 0 0 31px 0 $box-shadow1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .actionsContainer {
+    margin: 20px 0 0;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+}

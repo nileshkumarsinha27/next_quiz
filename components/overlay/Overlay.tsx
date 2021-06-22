@@ -11,7 +11,7 @@ const Overlay: FC<OverlayProps> = ({
   children = <></>,
 }: OverlayProps) => {
   const overlayClose = (event: KeyboardEvent) => {
-    if (event.key === 'esc') {
+    if (event.keyCode === 27) {
       closeOverlay();
     }
   };
@@ -23,6 +23,11 @@ const Overlay: FC<OverlayProps> = ({
     <div className={OverlayStyles.overlayContainer}>
       <div className={OverlayStyles.overlay} />
       {children}
+      <style jsx global>{`
+        body {
+          overflow: hidden;
+        }
+      `}</style>
     </div>
   );
 };

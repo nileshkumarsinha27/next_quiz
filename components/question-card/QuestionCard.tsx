@@ -13,6 +13,7 @@ export interface QuestionCardProps extends QuizQuestion {
     index: number
   ) => void;
   userResponse: Array<any>;
+  hasTestSubmit: boolean;
 }
 
 const QuestionCard = ({
@@ -22,6 +23,7 @@ const QuestionCard = ({
   index,
   handleCheckboxClick,
   userResponse,
+  hasTestSubmit,
 }) => {
   const [shuffledList, updateShuffledList] = useState<Array<string>>([]);
   useEffect(() => {
@@ -45,6 +47,16 @@ const QuestionCard = ({
               handleCheckboxClick(isCheck, option, index)
             }
             checkState={userResponse[index].response === option}
+            isCorrectResponse={
+              hasTestSubmit &&
+              userResponse[index].isResponseCorrect &&
+              userResponse[index].response === option
+            }
+            isErrorResponse={
+              hasTestSubmit &&
+              !userResponse[index].isResponseCorrect &&
+              userResponse[index].response === option
+            }
           />
         ))}
       </div>

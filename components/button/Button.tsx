@@ -1,23 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, ButtonHTMLAttributes } from 'react';
 import cx from 'classnames';
 import ButtonStyles from './button.module.scss';
 
-export type ButtonProps = {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
-  handleClick: () => void;
   btnType?: string;
-};
+}
 
 const Button: FC<ButtonProps> = ({
   value,
-  handleClick,
   btnType = 'primary',
+  ...props
 }: ButtonProps) => (
   <>
-    <button
-      onClick={handleClick}
-      className={cx([ButtonStyles.button, btnType])}
-    >
+    <button className={cx([ButtonStyles.button, btnType])} {...props}>
       {value}
     </button>
     <style jsx>
@@ -29,6 +25,14 @@ const Button: FC<ButtonProps> = ({
         .primary :hover {
           background: #fff;
           color: #2184ff;
+        }
+        .error {
+          background: #d63443;
+          border: 1px solid #d63443;
+        }
+        .error :hover {
+          background: #fff;
+          color: #d63443;
         }
       `}
     </style>

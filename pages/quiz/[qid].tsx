@@ -8,6 +8,7 @@ import { QuizPageProps, QuizQuestion } from '../../types/quizPageProps';
 import QuestionCard from '../../components/question-card/QuestionCard';
 import Button from '../../components/button/Button';
 import Overlay from '../../components/overlay/Overlay';
+import Dialogbox from '../../components/dailog-box/DialogBox';
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
@@ -16,10 +17,11 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
     (eachQuestion: QuizQuestion) => eachQuestion.correct_answer
   );
   const [responses, updateResponses] = useState(
-    quizInfo.map((_) => ({ response: '' }))
+    quizInfo.map((_) => ({ response: '', isResponseCorrect: false }))
   );
   const [showScore, toggleScore] = useState<boolean>(false);
   const [score, updateScore] = useState<number>(0);
+  const [hasTestSubmit, toggleTestSubmit] = useState<boolean>(false);
   const handleCheckboxClick = (
     isCheck: boolean,
     option: string,
@@ -35,10 +37,24 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
     responses.forEach((eachResponse, index) => {
       if (eachResponse.response === correctAnswers[index]) {
         finalScore += 1;
+        eachResponse.isResponseCorrect = true;
       }
     });
     updateScore(finalScore);
     toggleScore(true);
+    toggleTestSubmit(true);
+  };
+
+  const hadleOkClick = () => {
+    toggleScore(false);
+  };
+  const handleCancelClick = () => {
+    updateScore(0);
+    toggleScore(false);
+    toggleTestSubmit(false);
+    updateResponses(
+      quizInfo.map((_) => ({ response: '', isResponseCorrect: false }))
+    );
   };
 
   return (
@@ -57,6 +73,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
               index,
               handleCheckboxClick,
               userResponse: responses,
+              hasTestSubmit,
             }}
             key={index}
           />
@@ -64,10 +81,45 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
       </section>
       {responses.every((eachResponse) => eachResponse.response) && (
         <div className="sticky-bottom">
-          <Button value="Submit Quiz" handleClick={handleQuizSubmit} />
+          <div className="button-container">
+            <Button
+              value="Reset Quiz"
+              onClick={handleCancelClick}
+              btnType="error"
+            />
+            <Button value="Submit Quiz" onClick={handleQuizSubmit} />
+          </div>
         </div>
       )}
-      {showScore && <Overlay closeOverlay={() => toggleScore(false)} />}
+      {showScore && (
+        <Overlay closeOverlay={() => toggleScore(false)}>
+          <Dialogbox
+            showActionsSection
+            actionsConfig={[
+              {
+                value: 'Ok',
+                onClick: hadleOkClick,
+                btnType: 'primary',
+              },
+              {
+                value: 'Cancel',
+                onClick: handleCancelClick,
+                btnType: 'error',
+              },
+            ]}
+          >
+            <p className="dialog-text">
+              <span>
+                Your final score is
+                <strong>
+                  {score} / {responses.length}.
+                </strong>
+              </span>
+              <span>Do you wish to check correct answers?</span>
+            </p>
+          </Dialogbox>
+        </Overlay>
+      )}
       <style jsx lang="scss">
         {`
           .quiz-title {
@@ -98,6 +150,23 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
             justify-content: flex-end;
             padding: 0 20px;
             box-sizing: border-box;
+          }
+          .button-container {
+            width: 30%;
+            display: flex;
+            justify-content: space-evenly;
+          }
+          .dialog-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          .dialog-text strong {
+            padding: 0 5px;
+            font-size: 1.2rem;
+          }
+          .dialog-text span {
+            padding: 5px 0;
           }
         `}
       </style>

@@ -12,9 +12,17 @@
   label {
     padding: 0 0 0 10px;
     cursor: pointer;
-    &.labelSelected {
+    &.selected {
       font-weight: 600;
+    }
+    &.labelSelected {
       color: $primary-color;
+    }
+    &.correctResponse {
+      color: $green;
+    }
+    &.errorResponse {
+      color: $error-color;
     }
   }
 }
