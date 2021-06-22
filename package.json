@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "classnames": "^2.3.1",
     "es6-promise": "^4.2.8",
     "eslint": "^7.29.0",
     "husky": "^6.0.0",

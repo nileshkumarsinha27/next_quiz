@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import { QuizPageProps, QuizQuestion } from '../../types/quizPageProps';
 import QuestionCard from '../../components/question-card/QuestionCard';
-import { shuffleArray } from '../../helpers/array';
+import Button from '../../components/button/Button';
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
@@ -26,6 +26,11 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
     temp[index].response = option;
     updateResponses(temp);
   };
+
+  const handleQuizSubmit = () => {
+    updateResponses(quizInfo.map((_) => ({ response: '' })));
+  };
+
   return (
     <main className="container">
       <Head>
@@ -47,6 +52,11 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           />
         ))}
       </section>
+      {responses.every((eachResponse) => eachResponse.response) && (
+        <div className="sticky-bottom">
+          <Button value="Submit Quiz" handleClick={handleQuizSubmit} />
+        </div>
+      )}
       <style jsx lang="scss">
         {`
           .quiz-title {
@@ -57,11 +67,26 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           .quiz-title span {
             font-size: 2rem;
           }
-          .trivia-category-section {
+          .quiz-section {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             width: 100%;
+            padding: 0 0 80px;
+          }
+          .sticky-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            left: 0;
+            background: #fff;
+            box-shadow: 0 0 31px 0 rgba(0, 0, 0, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 20px;
+            box-sizing: border-box;
           }
         `}
       </style>
