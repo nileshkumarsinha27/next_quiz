@@ -65,10 +65,9 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
       </Head>
       <div className="quiz-title">
         <Link href="/">
-          <span className="category-text">
-          Categories
-          </span>
-          </Link><span> > {quizInfo[0].category}</span>
+          <span className="category-text">Categories</span>
+        </Link>
+        <span> &gt; {quizInfo[0].category}</span>
       </div>
       <section className="quiz-section">
         {quizInfo.map((eachQuestion: QuizQuestion, index) => (
@@ -137,7 +136,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
             font-size: 0.9rem;
             font-weight: bold;
           }
-          .quiz-title .category-text{
+          .quiz-title .category-text {
             cursor: pointer;
             color: #000000;
           }
