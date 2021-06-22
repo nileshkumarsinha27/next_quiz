@@ -7,6 +7,7 @@ import { NextPage } from 'next';
 import { QuizPageProps, QuizQuestion } from '../../types/quizPageProps';
 import QuestionCard from '../../components/question-card/QuestionCard';
 import Button from '../../components/button/Button';
+import Overlay from '../../components/overlay/Overlay';
 
 const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const router = useRouter();
@@ -17,6 +18,8 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const [responses, updateResponses] = useState(
     quizInfo.map((_) => ({ response: '' }))
   );
+  const [showScore, toggleScore] = useState<boolean>(false);
+  const [score, updateScore] = useState<number>(0);
   const handleCheckboxClick = (
     isCheck: boolean,
     option: string,
@@ -28,7 +31,14 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   };
 
   const handleQuizSubmit = () => {
-    updateResponses(quizInfo.map((_) => ({ response: '' })));
+    let finalScore = 0;
+    responses.forEach((eachResponse, index) => {
+      if (eachResponse.response === correctAnswers[index]) {
+        finalScore += 1;
+      }
+    });
+    updateScore(finalScore);
+    toggleScore(true);
   };
 
   return (
@@ -57,6 +67,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           <Button value="Submit Quiz" handleClick={handleQuizSubmit} />
         </div>
       )}
+      {showScore && <Overlay closeOverlay={() => toggleScore(false)} />}
       <style jsx lang="scss">
         {`
           .quiz-title {
