@@ -13,6 +13,7 @@ import Overlay from '../../components/overlay/Overlay';
 import Dialogbox from '../../components/dailog-box/DialogBox';
 import Loader from '../../components/loader/Loader';
 import { isDataExists } from '../../helpers/array';
+import CountDown from '../../components/countdown/Countdown';
 
 const variants = {
   initial: {
@@ -47,6 +48,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const [score, updateScore] = useState<number>(0);
   const [hasTestSubmit, toggleTestSubmit] = useState<boolean>(false);
   const [showQuiz, toggleShowQuiz] = useState<boolean>(false);
+  const [showTimer, toggleTimer] = useState<boolean>(true);
   const handleCheckboxClick = (
     isCheck: boolean,
     option: string,
@@ -68,15 +70,18 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
     updateScore(finalScore);
     toggleScore(true);
     toggleTestSubmit(true);
+    toggleTimer(false);
   };
 
   const hadleOkClick = () => {
     toggleScore(false);
   };
   const handleCancelClick = () => {
+    toggleShowQuiz(false);
     updateScore(0);
     toggleScore(false);
     toggleTestSubmit(false);
+    toggleTimer(true);
     updateResponses(
       quizInfo.map((_) => ({ response: '', isResponseCorrect: false }))
     );
@@ -100,6 +105,16 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           {showQuiz ? (
             <>
               <AnimatePresence>
+                {showTimer && (
+                  <div className="timer-container">
+                    <CountDown
+                      duration={300}
+                      size={75}
+                      isPlaying={showQuiz}
+                      onComplete={handleQuizSubmit}
+                    />
+                  </div>
+                )}
                 <section className="quiz-section">
                   {quizInfo.map((eachQuestion: QuizQuestion, index) => (
                     <motion.section
@@ -125,7 +140,8 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
                   ))}
                 </section>
               </AnimatePresence>
-              {responses.every((eachResponse) => eachResponse.response) && (
+              {(responses.every((eachResponse) => eachResponse.response) ||
+                !showTimer) && (
                 <AnimatePresence>
                   <motion.div
                     className="sticky-bottom"
@@ -210,7 +226,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
                         quiz.
                       </li>
                       <li>
-                        The quiz has a time limit of 10 minutes and will be
+                        The quiz has a time limit of 5 minutes and will be
                         automatically submitted once the time is over.
                       </li>
                     </ol>
@@ -289,6 +305,14 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           .dialog-text li {
             padding: 5px 0;
             box-sizing: border-box;
+          }
+          .timer-container {
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            right: 50px;
+            top: 60px;
+            z-index: 2;
           }
           @media screen and (max-width: 767px) {
             .button-container {
