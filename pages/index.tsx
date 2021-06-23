@@ -7,6 +7,17 @@ import { TriviaCategory } from '../types/triviaCategory';
 import CategoryCard from '../components/category-card/CategoryCard';
 import Loader from '../components/loader/Loader';
 import { isDataExists } from '../helpers/array';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const variants = {
+  initial: {
+    y: '200%',
+  },
+  animate: {
+    y: 0,
+    transition: { duration: 1 },
+  },
+};
 
 const Home: NextPage<HomePageProps> = ({ categories }: HomePageProps) => (
   <main className="container">
@@ -20,11 +31,24 @@ const Home: NextPage<HomePageProps> = ({ categories }: HomePageProps) => (
         <section className="home-title">
           <span>Please select a category to start the quiz</span>
         </section>
-        <section className="trivia-category-section">
-          {categories.map(({ id, name }: TriviaCategory) => (
-            <CategoryCard key={id} {...{ id, name }} />
-          ))}
-        </section>
+        <AnimatePresence>
+          <motion.section
+            className="trivia-category-section"
+            variants={variants}
+            initial="initial"
+            animate="animate"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              width: '100%',
+            }}
+          >
+            {categories.map(({ id, name }: TriviaCategory) => (
+              <CategoryCard key={id} {...{ id, name }} />
+            ))}
+          </motion.section>
+        </AnimatePresence>
       </>
     )}
     <style jsx lang="scss">
@@ -36,12 +60,6 @@ const Home: NextPage<HomePageProps> = ({ categories }: HomePageProps) => (
         }
         .home-title span {
           font-size: 2rem;
-        }
-        .trivia-category-section {
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          width: 100%;
         }
       `}
     </style>

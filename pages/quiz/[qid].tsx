@@ -15,21 +15,21 @@ import Loader from '../../components/loader/Loader';
 import { isDataExists } from '../../helpers/array';
 
 const variants = {
-  initial: (i) => ({
-    x: i % 2 == 0 ? -600 : 600,
-  }),
+  initial: {
+    y: '200%',
+  },
   animate: (i) => ({
-    x: 0,
-    transition: { duration: 0.3 * i },
+    y: 20,
+    transition: { ease: 'easeIn', type: 'spring', delay: i * 0.1 },
   }),
-  exit: { x: -200, transition: { duration: 0.6 } },
+  exit: { y: '200%', transition: { duration: 0.6 } },
 };
 
 const stickyBanner = {
   initial: { y: '200%' },
   animate: {
     y: 0,
-    transition: { duration: 0.6 },
+    transition: { duration: 0.6, ease: 'easeIn' },
   },
   exit: { y: '200%', transition: { duration: 0.6 } },
 };
@@ -46,6 +46,7 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
   const [showScore, toggleScore] = useState<boolean>(false);
   const [score, updateScore] = useState<number>(0);
   const [hasTestSubmit, toggleTestSubmit] = useState<boolean>(false);
+  const [showQuiz, toggleShowQuiz] = useState<boolean>(false);
   const handleCheckboxClick = (
     isCheck: boolean,
     option: string,
@@ -96,94 +97,128 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
         <Loader />
       ) : (
         <>
-          <section className="quiz-section">
-            {quizInfo.map((eachQuestion: QuizQuestion, index) => (
+          {showQuiz ? (
+            <>
               <AnimatePresence>
-                <motion.section
-                  custom={index + 1}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={variants}
-                  key={index}
-                  style={{ width: '100%' }}
-                >
-                  <QuestionCard
-                    {...{
-                      ...eachQuestion,
-                      index,
-                      handleCheckboxClick,
-                      userResponse: responses,
-                      hasTestSubmit,
-                    }}
-                    key={index}
-                  />
-                </motion.section>
+                <section className="quiz-section">
+                  {quizInfo.map((eachQuestion: QuizQuestion, index) => (
+                    <motion.section
+                      custom={index + 1}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      variants={variants}
+                      key={index}
+                      style={{ width: '100%' }}
+                    >
+                      <QuestionCard
+                        {...{
+                          ...eachQuestion,
+                          index,
+                          handleCheckboxClick,
+                          userResponse: responses,
+                          hasTestSubmit,
+                        }}
+                        key={index}
+                      />
+                    </motion.section>
+                  ))}
+                </section>
               </AnimatePresence>
-            ))}
-          </section>
-          {responses.every((eachResponse) => eachResponse.response) && (
-            <AnimatePresence>
-              <motion.div
-                className="sticky-bottom"
-                variants={stickyBanner}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                style={{
-                  position: 'fixed',
-                  bottom: 0,
-                  width: '100%',
-                  height: '80px',
-                  left: 0,
-                  background: '#fff',
-                  boxShadow: '0 0 31px 0 rgba(0, 0, 0, 0.14)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  padding: '0 20px',
-                  boxSizing: 'border-box',
-                }}
-              >
-                <div className="button-container">
-                  <Button
-                    value="Reset Quiz"
-                    onClick={handleCancelClick}
-                    btnType="error"
-                  />
-                  <Button value="Submit Quiz" onClick={handleQuizSubmit} />
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
-          {showScore && (
-            <Overlay closeOverlay={() => toggleScore(false)}>
-              <Dialogbox
-                showActionsSection
-                actionsConfig={[
-                  {
-                    value: 'Ok',
-                    onClick: hadleOkClick,
-                    btnType: 'primary',
-                  },
-                  {
-                    value: 'Cancel',
-                    onClick: handleCancelClick,
-                    btnType: 'error',
-                  },
-                ]}
-              >
-                <p className="dialog-text">
-                  <span>
-                    Your final score is
-                    <strong>
-                      {score} / {responses.length}.
-                    </strong>
-                  </span>
-                  <span>Do you wish to check correct answers?</span>
-                </p>
-              </Dialogbox>
-            </Overlay>
+              {responses.every((eachResponse) => eachResponse.response) && (
+                <AnimatePresence>
+                  <motion.div
+                    className="sticky-bottom"
+                    variants={stickyBanner}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    style={{
+                      position: 'fixed',
+                      bottom: 0,
+                      width: '100%',
+                      height: '80px',
+                      left: 0,
+                      background: '#fff',
+                      boxShadow: '0 0 31px 0 rgba(0, 0, 0, 0.14)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      padding: '0 20px',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <div className="button-container">
+                      <Button
+                        value="Reset Quiz"
+                        onClick={handleCancelClick}
+                        btnType="error"
+                      />
+                      <Button value="Submit Quiz" onClick={handleQuizSubmit} />
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              )}
+              {showScore && (
+                <Overlay closeOverlay={() => toggleScore(false)}>
+                  <Dialogbox
+                    showActionsSection
+                    actionsConfig={[
+                      {
+                        value: 'Ok',
+                        onClick: hadleOkClick,
+                        btnType: 'primary',
+                      },
+                      {
+                        value: 'Cancel',
+                        onClick: handleCancelClick,
+                        btnType: 'error',
+                      },
+                    ]}
+                  >
+                    <p className="dialog-text">
+                      <span>
+                        Your final score is
+                        <strong>
+                          {score} / {responses.length}.
+                        </strong>
+                      </span>
+                      <span>Do you wish to check correct answers?</span>
+                    </p>
+                  </Dialogbox>
+                </Overlay>
+              )}
+            </>
+          ) : (
+            <>
+              <Overlay closeOverlay={() => toggleShowQuiz(true)}>
+                <Dialogbox
+                  showActionsSection
+                  actionsConfig={[
+                    {
+                      value: 'Start Quiz',
+                      onClick: () => toggleShowQuiz(true),
+                      btnType: 'primary',
+                    },
+                  ]}
+                >
+                  <div className="dialog-text">
+                    <span>Following are the rules for the quiz:</span>
+                    <ol>
+                      <li>
+                        All the questions must be attempted in order to end the
+                        quiz.
+                      </li>
+                      <li>
+                        The quiz has a time limit of 10 minutes and will be
+                        automatically submitted once the time is over.
+                      </li>
+                    </ol>
+                    <span>All the best for the quiz!!!!!!</span>
+                  </div>
+                </Dialogbox>
+              </Overlay>
+            </>
           )}
         </>
       )}
@@ -243,6 +278,17 @@ const Quiz: NextPage<QuizPageProps> = ({ quizInfo }: QuizPageProps) => {
           }
           .dialog-text span {
             padding: 5px 0;
+          }
+          .dialog-text ol {
+            list-style: number;
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            margin: 0 auto;
+          }
+          .dialog-text li {
+            padding: 5px 0;
+            box-sizing: border-box;
           }
           @media screen and (max-width: 767px) {
             .button-container {
